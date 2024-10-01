@@ -24,7 +24,7 @@ class UserServiceTests {
     @ParameterizedTest
     @ArgumentsSource(UserArgumentsProvider.class)
     void testSaveNewUser(User user) {
-        assertTrue(userService.saveNewUserTest(user));
+        assertTrue(userService.saveNewUser(user));
     }
 
     @Disabled
