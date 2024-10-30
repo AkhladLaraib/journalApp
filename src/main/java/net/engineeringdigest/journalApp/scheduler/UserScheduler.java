@@ -39,7 +39,7 @@ public class UserScheduler {
         for (User user: users) {
             List<JournalEntry> journalEntries = user.getJournalEntries();
             List<Sentiment> sentiments = journalEntries.stream().filter(x ->
-                     x.getDate().isAfter(LocalDateTime.now().minusDays(7)))
+                     x.getDate().isAfter(LocalDateTime.now().minusHours(13)))
                     .map(JournalEntry::getSentiment)
                     .collect(Collectors.toList());
 
@@ -62,7 +62,11 @@ public class UserScheduler {
             if (mostFrequentSentiment != null) {
 //                emailService.sendEmail(user.getEmail(), "Sentiment for last 12 hours ", mostFrequentSentiment.toString());
                 SentimentData sentimentData =  SentimentData.builder().email(user.getEmail()).sentiment("Sentiment for last 12 hours "+ mostFrequentSentiment).build();
-                kafkaTemplate.send("12hours-sentiments ", sentimentData.getEmail(), sentimentData);
+                try {
+                    kafkaTemplate.send("12hours-sentiments ", sentimentData.getEmail(), sentimentData);
+                } catch (Exception e) {
+                    emailService.sendEmail(sentimentData.getEmail(), "Sentiment for 12-hours", sentimentData.getSentiment());
+                }
 
             }
 

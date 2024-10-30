@@ -38,7 +38,7 @@ public class PublicController {
 
     @PostMapping("/signup")
     public void signup(@RequestBody User user) {
-        userService.saveNewUser(user);
+        userService.saveAdmin(user);
     }
 
     @PostMapping("/login")
